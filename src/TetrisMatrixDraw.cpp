@@ -16,521 +16,479 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-
 #include "TetrisMatrixDraw.h"
 #include "TetrisNumbers.h"
 #include "TetrisLetters.h"
 
-TetrisMatrixDraw::TetrisMatrixDraw(Adafruit_GFX &display)	{
-    this->display = &display;
-    resetNumStates();
+TetrisMatrixDraw::TetrisMatrixDraw(Adafruit_GFX &display)
+{
+  _display = &display;
+  resetNumStates();
 }
-
+/*
 void TetrisMatrixDraw::drawChar(String letter, uint8_t x, uint8_t y, uint16_t color)
 {
-    this->display->setTextColor(color);
-    this->display->setCursor(x, y);
-    this->display->print(letter);
+  _display->setTextColor(color);
+  _display->setCursor(x, y);
+  _display->print(letter);
 }
-
-// *********************************************************************
-// Draws a brick shape at a given position
-// *********************************************************************
-void TetrisMatrixDraw::drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot)
+*/
+void TetrisMatrixDraw::drawShape(BlockType blockType, uint16_t color, int xPos, int yPos, BlockRotation blockRotation)
 {
-  // Square
-  if (blocktype == 0)
+  if (blockType == SQUARE)
   {
-    this->display->drawPixel(x_pos, y_pos, color);
-    this->display->drawPixel(x_pos + 1, y_pos, color);
-    this->display->drawPixel(x_pos, y_pos - 1, color);
-    this->display->drawPixel(x_pos + 1, y_pos - 1, color);
+    _display->drawPixel(xPos, yPos, color);
+    _display->drawPixel(xPos + 1, yPos, color);
+    _display->drawPixel(xPos, yPos - 1, color);
+    _display->drawPixel(xPos + 1, yPos - 1, color);
   }
-
-  // L-Shape
-  if (blocktype == 1)
+  else if (blockType == L_SHAPE)
   {
-    if (num_rot == 0)
+    if (blockRotation == ROTATION_0)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos, y_pos - 2, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos, yPos - 2, color);
     }
-    if (num_rot == 1)
+    else if (blockRotation == ROTATION_90)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 2, y_pos - 1, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 2, yPos - 1, color);
     }
-    if (num_rot == 2)
+    else if (blockRotation == ROTATION_180)
     {
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 2, color);
-      this->display->drawPixel(x_pos, y_pos - 2, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 2, color);
+      _display->drawPixel(xPos, yPos - 2, color);
     }
-    if (num_rot == 3)
+    else if (blockRotation == ROTATION_270)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 2, y_pos, color);
-      this->display->drawPixel(x_pos + 2, y_pos - 1, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 2, yPos, color);
+      _display->drawPixel(xPos + 2, yPos - 1, color);
     }
   }
-
-  // L-Shape (reverse)
-  if (blocktype == 2)
+  else if (blockType == L_SHAPE_REVERSE)
   {
-    if (num_rot == 0)
+    if (blockRotation == ROTATION_0)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 2, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 2, color);
     }
-    if (num_rot == 1)
+    else if (blockRotation == ROTATION_90)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 2, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 2, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
     }
-    if (num_rot == 2)
+    else if (blockRotation == ROTATION_180)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos, y_pos - 2, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 2, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos, yPos - 2, color);
+      _display->drawPixel(xPos + 1, yPos - 2, color);
     }
-    if (num_rot == 3)
+    else if (blockRotation == ROTATION_270)
     {
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 2, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 2, y_pos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 2, yPos - 1, color);
+      _display->drawPixel(xPos + 2, yPos, color);
     }
   }
-
-  // I-Shape
-  if (blocktype == 3)
+  else if (blockType == I_SHAPE)
   {
-    if (num_rot == 0 || num_rot == 2)
-    { // Horizontal
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 2, y_pos, color);
-      this->display->drawPixel(x_pos + 3, y_pos, color);
+    if (blockRotation == ROTATION_90 || blockRotation == ROTATION_270)
+    {
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 2, yPos, color);
+      _display->drawPixel(xPos + 3, yPos, color);
     }
-    if (num_rot == 1 || num_rot == 3)
-    { // Vertical
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos, y_pos - 2, color);
-      this->display->drawPixel(x_pos, y_pos - 3, color);
+    else // if (blockRotation == ROTATION_0 || blockRotation == ROTATION_180)
+    {
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos, yPos - 2, color);
+      _display->drawPixel(xPos, yPos - 3, color);
     }
   }
-
-  // S-Shape
-  if (blocktype == 4)
+  else if (blockType == S_SHAPE)
   {
-    if (num_rot == 0 || num_rot == 2)
+    if (blockRotation == ROTATION_90 || blockRotation == ROTATION_270)
     {
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos, y_pos - 2, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos, yPos - 2, color);
     }
-    if (num_rot == 1 || num_rot == 3)
+    else // if (blockRotation == ROTATION_0 || blockRotation == ROTATION_180)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 2, y_pos - 1, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 2, yPos - 1, color);
     }
   }
-
-  // S-Shape (reversed)
-  if (blocktype == 5)
+  else if (blockType == S_SHAPE_REVERSE)
   {
-    if (num_rot == 0 || num_rot == 2)
+    if (blockRotation == ROTATION_90 || blockRotation == ROTATION_270)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 2, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 2, color);
     }
-    if (num_rot == 1 || num_rot == 3)
+    else // if (blockRotation == ROTATION_0 || blockRotation == ROTATION_180)
     {
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 2, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 2, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
     }
   }
-
-  // Half cross
-  if (blocktype == 6)
+  else if (blockType == HALF_CROSS)
   {
-    if (num_rot == 0)
+    if (blockRotation == ROTATION_0)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos + 2, y_pos, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 2, yPos, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
     }
-    if (num_rot == 1)
+    else if (blockRotation == ROTATION_90)
     {
-      this->display->drawPixel(x_pos, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos, y_pos - 2, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos, yPos - 2, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
     }
-    if (num_rot == 2)
+    else if (blockRotation == ROTATION_180)
     {
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 2, y_pos - 1, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 2, yPos - 1, color);
     }
-    if (num_rot == 3)
+    else if (blockRotation == ROTATION_270)
     {
-      this->display->drawPixel(x_pos + 1, y_pos, color);
-      this->display->drawPixel(x_pos, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-      this->display->drawPixel(x_pos + 1, y_pos - 2, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 2, color);
     }
   }
-
-   // Corner-Shape 
-   if (blocktype == 7)
-   {
-     if (num_rot == 0)
-     {
-       this->display->drawPixel(x_pos, y_pos, color);
-       this->display->drawPixel(x_pos + 1, y_pos, color);
-       this->display->drawPixel(x_pos, y_pos - 1, color);
-     }
-     if (num_rot == 1)
-     {
-       this->display->drawPixel(x_pos, y_pos, color);
-       this->display->drawPixel(x_pos, y_pos - 1, color);
-       this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-     }
-     if (num_rot == 2)
-     {
-       this->display->drawPixel(x_pos + 1 , y_pos, color);
-       this->display->drawPixel(x_pos + 1 , y_pos - 1, color);
-       this->display->drawPixel(x_pos, y_pos - 1, color);
-     }
-     if (num_rot == 3)
-     {
-       this->display->drawPixel(x_pos, y_pos, color);
-       this->display->drawPixel(x_pos + 1, y_pos , color);
-       this->display->drawPixel(x_pos + 1, y_pos - 1, color);
-     }
-   }
-}
-
-void TetrisMatrixDraw::drawLargerBlock(int x_pos, int y_pos, int scale, uint16_t color){
-  this->display->fillRect(x_pos, y_pos, scale, scale, color);
-  if(drawOutline){
-    this->display->drawRect(x_pos, y_pos, scale, scale, this->outLineColour);
+  else if (blockType == CORNER_SHAPE)
+  {
+    if (blockRotation == ROTATION_0)
+    {
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+    }
+    else if (blockRotation == ROTATION_90)
+    {
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+    }
+    else if (blockRotation == ROTATION_180)
+    {
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+      _display->drawPixel(xPos, yPos - 1, color);
+    }
+    else if (blockRotation == ROTATION_270)
+    {
+      _display->drawPixel(xPos, yPos, color);
+      _display->drawPixel(xPos + 1, yPos, color);
+      _display->drawPixel(xPos + 1, yPos - 1, color);
+    }
   }
 }
 
-void TetrisMatrixDraw::drawLargerShape(int scale, int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot)
+void TetrisMatrixDraw::drawLargerBlock(int xPos, int yPos, int scale, uint16_t color)
+{
+  _display->fillRect(xPos, yPos, scale, scale, color);
+  if (_drawOutline)
+  {
+    _display->drawRect(xPos, yPos, scale, scale, _outlineColor);
+  }
+}
+
+void TetrisMatrixDraw::drawLargerShape(int scale, BlockType blockType, uint16_t color, int xPos, int yPos, BlockRotation blockRotation)
 {
   int offset1 = 1 * scale;
   int offset2 = 2 * scale;
   int offset3 = 3 * scale;
 
   // Square
-  if (blocktype == 0)
+  if (blockType == SQUARE)
   {
-    this->drawLargerBlock(x_pos, y_pos, scale, color);
-    this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-    this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-    this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
+    drawLargerBlock(xPos, yPos, scale, color);
+    drawLargerBlock(xPos + offset1, yPos, scale, color);
+    drawLargerBlock(xPos, yPos - offset1, scale, color);
+    drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+  }
+  else if (blockType == L_SHAPE)
+  {
+    if (blockRotation == ROTATION_0)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos, yPos - offset2, scale, color);
+    }
+    else if (blockRotation == ROTATION_90)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset2, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_180)
+    {
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset2, scale, color);
+      drawLargerBlock(xPos, yPos - offset2, scale, color);
+    }
+    else if (blockRotation == ROTATION_270)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset2, yPos, scale, color);
+      drawLargerBlock(xPos + offset2, yPos - offset1, scale, color);
+    }
+  }
+  else if (blockType == L_SHAPE_REVERSE)
+  {
+    if (blockRotation == ROTATION_0)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset2, scale, color);
+    }
+    else if (blockRotation == ROTATION_90)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset2, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_180)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos, yPos - offset2, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset2, scale, color);
+    }
+    else if (blockRotation == ROTATION_270)
+    {
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset2, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset2, yPos, scale, color);
+    }
+  }
+  else if (blockType == I_SHAPE)
+  {
+    if (blockRotation == ROTATION_90 || blockRotation == ROTATION_270)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset2, yPos, scale, color);
+      drawLargerBlock(xPos + offset3, yPos, scale, color);
+      return;
+    }
+    else
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos, yPos - offset2, scale, color);
+      drawLargerBlock(xPos, yPos - offset3, scale, color);
+      return;
+    }
+  }
+  else if (blockType == S_SHAPE)
+  {
+    if (blockRotation == ROTATION_90 || blockRotation == ROTATION_270)
+    {
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos, yPos - offset2, scale, color);
+    }
+    else
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset2, yPos - offset1, scale, color);
+    }
+  }
+  else if (blockType == S_SHAPE_REVERSE)
+  {
+    if (blockRotation == ROTATION_90 || blockRotation == ROTATION_270)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset2, scale, color);
+      return;
+    }
+    else
+    {
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset2, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      return;
+    }
+  }
+  else if (blockType == HALF_CROSS)
+  {
+    if (blockRotation == ROTATION_0)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset2, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_90)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos, yPos - offset2, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_180)
+    {
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset2, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_270)
+    {
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset2, scale, color);
+    }
+  }
+  else if (blockType == CORNER_SHAPE)
+  {
+    if (blockRotation == ROTATION_0)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_90)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_180)
+    {
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+      drawLargerBlock(xPos, yPos - offset1, scale, color);
+    }
+    else if (blockRotation == ROTATION_270)
+    {
+      drawLargerBlock(xPos, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos, scale, color);
+      drawLargerBlock(xPos + offset1, yPos - offset1, scale, color);
+    }
+  }
+}
+
+void TetrisMatrixDraw::setFallState(int index, int value, int xPos)
+{
+  if (index < TETRIS_MAX_NUMBERS)
+  {
+    Serial.println(value);
+    _fallStates[index].value = value;
+    _fallStates[index].xPos = xPos;
+    _fallStates[index].yPos = 0;
+    _fallStates[index].blockIndex = 0;
+  }
+}
+
+void TetrisMatrixDraw::setTime(String timeStr, bool forceRefresh)
+{
+  _displayValueCharCount = 4;
+  timeStr.replace(":", "");
+  for (uint8_t pos = 0; pos < 4; pos++)
+  {
+    int xOffset = pos * TETRIS_DISTANCE_BETWEEN_DIGITS * _scale;
+    if (pos >= 2)
+    {
+      xOffset += (3 * _scale);
+    }
+
+    char digit = timeStr[pos];
+    if (forceRefresh || digit != _fallStates[pos].value)
+    {
+      setFallState(pos, digit, xOffset);
+    }
+  }
+}
+
+void TetrisMatrixDraw::setNumber(int number, bool forceRefresh)
+{
+  String numberStr = String(number);
+  if (numberStr.length() > TETRIS_MAX_NUMBERS)
+  {
+    Serial.println("Number too long");
     return;
   }
 
-  // L-Shape
-  if (blocktype == 1)
+  for (uint8_t pos = 0; pos < numberStr.length(); pos++)
   {
-    if (num_rot == 0)
+    int digitXPos = pos * _scale * TETRIS_DISTANCE_BETWEEN_DIGITS;
+    int digitValue = (int)numberStr[pos];
+    // Only change the number if its different or being forced
+    if (forceRefresh || digitValue != _fallStates[pos].value)
     {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset2, scale, color);
-      return;
+      setFallState(pos, digitValue, digitXPos);
     }
-    if (num_rot == 1)
+    else
     {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos - offset1, scale, color);
-      return;
+      _fallStates[pos].xPos = digitXPos;
     }
-    if (num_rot == 2)
-    {
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset2, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset2, scale, color);
-      return;
-    }
-    if (num_rot == 3)
-    {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos - offset1, scale, color);
-      return;
-    }
-  }
-
-  // L-Shape (reverse)
-  if (blocktype == 2)
-  {
-    if (num_rot == 0)
-    {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset2, scale, color);
-      return;
-    }
-    if (num_rot == 1)
-    {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      return;
-    }
-    if (num_rot == 2)
-    {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset2, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset2, scale, color);
-      return;
-    }
-    if (num_rot == 3)
-    {
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos, scale, color);
-      return;
-    }
-  }
-
-  // I-Shape
-  if (blocktype == 3)
-  {
-    if (num_rot == 0 || num_rot == 2)
-    { // Horizontal
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset3, y_pos, scale, color);
-      return;
-    }
-    //if (num_rot == 1 || num_rot == 3)
-    //{ // Vertical
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset2, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset3, scale, color);
-      return;
-    //}
-  }
-
-  // S-Shape
-  if (blocktype == 4)
-  {
-    if (num_rot == 0 || num_rot == 2)
-    {
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset2, scale, color);
-      return;
-    }
-    //if (num_rot == 1 || num_rot == 3)
-    //{
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos - offset1, scale, color);
-      return;
-    //}
-  }
-
-  // S-Shape (reversed)
-  if (blocktype == 5)
-  {
-    if (num_rot == 0 || num_rot == 2)
-    {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset2, scale, color);
-      return;
-    }
-    //if (num_rot == 1 || num_rot == 3)
-    //{
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      return;
-    //}
-  }
-
-  // Half cross
-  if (blocktype == 6)
-  {
-    if (num_rot == 0)
-    {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      return;
-    }
-    if (num_rot == 1)
-    {
-      this->drawLargerBlock(x_pos, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset2, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      return;
-    }
-    if (num_rot == 2)
-    {
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset2, y_pos - offset1, scale, color);
-      return;
-    }
-    //if (num_rot == 3)
-    //{
-      this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-      this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-      this->drawLargerBlock(x_pos + offset1, y_pos - offset2, scale, color);
-    //}
-  }
-
-   // Corner-Shape 
-   if (blocktype == 7)
-   {
-     if (num_rot == 0)
-     {
-       this->drawLargerBlock(x_pos, y_pos, scale, color);
-       this->drawLargerBlock(x_pos + offset1, y_pos, scale, color);
-       this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-       return;
-     }
-     if (num_rot == 1)
-     {
-       this->drawLargerBlock(x_pos, y_pos, scale, color);
-       this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-       this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-       return;
-     }
-     if (num_rot == 2)
-     {
-       this->drawLargerBlock(x_pos + offset1 , y_pos, scale, color);
-       this->drawLargerBlock(x_pos + offset1 , y_pos - offset1, scale, color);
-       this->drawLargerBlock(x_pos, y_pos - offset1, scale, color);
-       return;
-     }
-     //if (num_rot == 3)
-     //{
-       this->drawLargerBlock(x_pos, y_pos, scale, color);
-       this->drawLargerBlock(x_pos + offset1, y_pos , scale, color);
-       this->drawLargerBlock(x_pos + offset1, y_pos - offset1, scale, color);
-     //}
-   }
-}
-
-void TetrisMatrixDraw::setNumState(int index, int value, int x_shift)
-{
-    if(index < TETRIS_MAX_NUMBERS) {
-      Serial.println(value);
-        this->numstates[index].num_to_draw = value;
-        this->numstates[index].x_shift = x_shift;
-        this->numstates[index].fallindex = 0;
-        this->numstates[index].blockindex = 0;
-    }
-}
-
-void TetrisMatrixDraw::setTime(String time, bool forceRefresh)
-{
-    this->sizeOfValue = 4;
-    time.replace(":", "");
-    for (uint8_t pos = 0; pos < 4; pos++)
-    {
-      int xOffset = pos * TETRIS_DISTANCE_BETWEEN_DIGITS * this->scale;
-      if(pos >= 2){
-        xOffset += (3 * this->scale);
-      }
-      String individualNumber = time.substring(pos, pos + 1);
-      int number = (individualNumber != " ") ? individualNumber.toInt() : -1;
-      // Only change the number if its different or being forced
-      if (forceRefresh || number != this->numstates[pos].num_to_draw)
-      {
-        setNumState(pos, number, xOffset);
-      }
-    }
-}
-
-void TetrisMatrixDraw::setNumbers(int value, bool forceRefresh)
-{
-  String strValue = String(value);
-  if(strValue.length() <= TETRIS_MAX_NUMBERS){
-    this->sizeOfValue = strValue.length();
-    int currentXShift = 0;
-    for (uint8_t pos = 0; pos < this->sizeOfValue; pos++)
-    {
-      currentXShift = TETRIS_DISTANCE_BETWEEN_DIGITS * this->scale * pos;
-      int number = strValue.substring(pos, pos + 1).toInt();
-      // Only change the number if its different or being forced
-      if (forceRefresh || number != this->numstates[pos].num_to_draw)
-      {
-        setNumState(pos, number, currentXShift);
-      } else {
-        this->numstates[pos].x_shift = currentXShift;
-      }
-    }
-  } else {
-    Serial.println("Number too long");
   }
 }
-
+/*
 void TetrisMatrixDraw::setText(String txt, bool forceRefresh)
 {
-    this->sizeOfValue = txt.length();
-    int currentXShift = 0;
-    for (uint8_t pos = 0; pos < this->sizeOfValue; pos++)
+  sizeOfValue = txt.length();
+  int currentXShift = 0;
+  for (uint8_t pos = 0; pos < sizeOfValue; pos++)
+  {
+    currentXShift = TETRIS_DISTANCE_BETWEEN_DIGITS * _scale * pos;
+    char letter = txt.charAt(pos);
+    if (forceRefresh || (int)letter != numstates[pos].numberToDraw)
     {
-      currentXShift = TETRIS_DISTANCE_BETWEEN_DIGITS * this->scale * pos;
-      char letter = txt.charAt(pos);
-      if (forceRefresh || (int)letter != this->numstates[pos].num_to_draw)
-      {
-        setNumState(pos, (int)letter, currentXShift);
-      } else {
-        this->numstates[pos].x_shift = currentXShift;
-      }
+      setNumState(pos, (int)letter, currentXShift);
     }
+    else
+    {
+      numstates[pos].xShift = currentXShift;
+    }
+  }
 }
 
 bool TetrisMatrixDraw::drawText(int x, int yFinish)
@@ -538,208 +496,222 @@ bool TetrisMatrixDraw::drawText(int x, int yFinish)
   // For each number position
   bool finishedAnimating = true;
 
-  int scaledYOffset = (this->scale > 1) ? this->scale : 1;
-  int y = yFinish - (TETRIS_Y_DROP_DEFAULT * this->scale);
+  int scaledYOffset = (_scale > 1) ? _scale : 1;
+  int y = yFinish - (TETRIS_Y_DROP_DEFAULT * _scale);
 
   // For each number position
-  for (int numpos = 0; numpos < this->sizeOfValue; numpos++)
+  for (int numpos = 0; numpos < sizeOfValue; numpos++)
   {
 
-    if(numstates[numpos].num_to_draw >= 33)
+    if (numstates[numpos].numberToDraw >= 33)
     {
       // Draw falling shape
-      //if (numstates[numpos].blockindex < blocksPerNumber[numstates[numpos].num_to_draw])
-      if (numstates[numpos].blockindex < blocksPerChar[numstates[numpos].num_to_draw-33])
+      // if (numstates[numpos].blockindex < blocksPerNumber[numstates[numpos].num_to_draw])
+      if (numstates[numpos].blockIndex < blocksPerChar[numstates[numpos].numberToDraw - 33])
       {
         finishedAnimating = false;
-        fall_instr_let current_fall = getFallinstrByAscii(numstates[numpos].num_to_draw, numstates[numpos].blockindex);
+        LetterFallInstruction current_fall = getFallinstrByAscii(numstates[numpos].numberToDraw, numstates[numpos].blockIndex);
 
         // Handle variations of rotations
-        uint8_t rotations = current_fall.num_rot;
+        uint8_t rotations = current_fall.rotation;
         if (rotations == 1)
         {
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 2))
+          if (numstates[numpos].fallIndex < (int)(current_fall.yStop / 2))
           {
             rotations = 0;
           }
         }
         if (rotations == 2)
         {
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 3))
+          if (numstates[numpos].fallIndex < (int)(current_fall.yStop / 3))
           {
             rotations = 0;
           }
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 3 * 2))
+          if (numstates[numpos].fallIndex < (int)(current_fall.yStop / 3 * 2))
           {
             rotations = 1;
           }
         }
         if (rotations == 3)
         {
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4))
+          if (numstates[numpos].fallIndex < (int)(current_fall.yStop / 4))
           {
             rotations = 0;
           }
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4 * 2))
+          if (numstates[numpos].fallIndex < (int)(current_fall.yStop / 4 * 2))
           {
             rotations = 1;
           }
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4 * 3))
+          if (numstates[numpos].fallIndex < (int)(current_fall.yStop / 4 * 3))
           {
             rotations = 2;
           }
         }
-        if(this->scale <= 1){
-          drawShape(current_fall.blocktype, 
-                    this->tetrisColors[current_fall.color],
-                    x + current_fall.x_pos + numstates[numpos].x_shift, 
-                    y + numstates[numpos].fallindex - scaledYOffset, 
+        if (_scale <= 1)
+        {
+          drawShape(current_fall.type,
+                    DefaultPalette[current_fall.color],
+                    x + current_fall.xPos + numstates[numpos].xShift,
+                    y + numstates[numpos].fallIndex - scaledYOffset,
                     rotations);
-        } else {
-          drawLargerShape(this->scale, 
-                          current_fall.blocktype, 
-                          this->tetrisColors[current_fall.color], 
-                          x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift, 
-                          y + (numstates[numpos].fallindex * scaledYOffset) - scaledYOffset, 
+        }
+        else
+        {
+          drawLargerShape(_scale,
+                          current_fall.type,
+                          DefaultPalette[current_fall.color],
+                          x + (current_fall.xPos * _scale) + numstates[numpos].xShift,
+                          y + (numstates[numpos].fallIndex * scaledYOffset) - scaledYOffset,
                           rotations);
         }
-        //drawShape(current_fall.blocktype, this->tetrisColors[current_fall.color], x + current_fall.x_pos + numstates[numpos].x_shift, y + numstates[numpos].fallindex - 1, rotations);
-        numstates[numpos].fallindex++;
+        // drawShape(current_fall.blocktype, tetrisColors[current_fall.color], x + current_fall.x_pos + numstates[numpos].x_shift, y + numstates[numpos].fallindex - 1, rotations);
+        numstates[numpos].fallIndex++;
 
-        if (numstates[numpos].fallindex > current_fall.y_stop)
+        if (numstates[numpos].fallIndex > current_fall.yStop)
         {
-          numstates[numpos].fallindex = 0;
-          numstates[numpos].blockindex++;
+          numstates[numpos].fallIndex = 0;
+          numstates[numpos].blockIndex++;
         }
       }
 
       // Draw already dropped shapes
-      if (numstates[numpos].blockindex > 0)
+      if (numstates[numpos].blockIndex > 0)
       {
-        for (int i = 0; i < numstates[numpos].blockindex; i++)
+        for (int i = 0; i < numstates[numpos].blockIndex; i++)
         {
-          fall_instr_let fallen_block = getFallinstrByAscii(numstates[numpos].num_to_draw, i);
-          if(this->scale <= 1){
-            drawShape(fallen_block.blocktype, 
-                      this->tetrisColors[fallen_block.color], 
-                      x + fallen_block.x_pos + numstates[numpos].x_shift, 
-                      y + fallen_block.y_stop - 1, 
-                      fallen_block.num_rot);
-          } else {
-            drawLargerShape(this->scale, 
-                            fallen_block.blocktype, 
-                            this->tetrisColors[fallen_block.color], 
-                            x + (fallen_block.x_pos * this->scale) + numstates[numpos].x_shift, 
-                            y + (fallen_block.y_stop * scaledYOffset) - scaledYOffset, 
-                            fallen_block.num_rot);
+          LetterFallInstruction fallen_block = getFallinstrByAscii(numstates[numpos].numberToDraw, i);
+          if (_scale <= 1)
+          {
+            drawShape(fallen_block.type,
+                      DefaultPalette[fallen_block.color],
+                      x + fallen_block.xPos + numstates[numpos].xShift,
+                      y + fallen_block.yStop - 1,
+                      fallen_block.rotation);
           }
-          //drawShape(fallen_block.blocktype, this->tetrisColors[fallen_block.color], x + fallen_block.x_pos + numstates[numpos].x_shift, y + fallen_block.y_stop - 1, fallen_block.num_rot);
+          else
+          {
+            drawLargerShape(_scale,
+                            fallen_block.type,
+                            DefaultPalette[fallen_block.color],
+                            x + (fallen_block.xPos * _scale) + numstates[numpos].xShift,
+                            y + (fallen_block.yStop * scaledYOffset) - scaledYOffset,
+                            fallen_block.rotation);
+          }
+          // drawShape(fallen_block.blocktype, tetrisColors[fallen_block.color], x + fallen_block.x_pos + numstates[numpos].x_shift, y + fallen_block.y_stop - 1, fallen_block.num_rot);
         }
       }
     }
-    
   }
 
   return finishedAnimating;
 }
-
-bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon)
+*/
+bool TetrisMatrixDraw::drawNumber(int x, int y, bool displayColon)
 {
   // For each number position
   bool finishedAnimating = true;
+  int yFinish = y;
+  int yStart = yFinish - (TETRIS_Y_DROP_DEFAULT * _scale);
 
-  int scaledYOffset = (this->scale > 1) ? this->scale : 1;
-  int y = yFinish - (TETRIS_Y_DROP_DEFAULT * this->scale);
-
-  for (int numpos = 0; numpos < this->sizeOfValue; numpos++)
+  for (int pos = 0; pos < _displayValueCharCount; pos++)
   {
-    if(numstates[numpos].num_to_draw >= 0) 
+    if (_fallStates[pos].value < 0 || _fallStates[pos].value > 9)
     {
-      // Draw falling shape
-      if (numstates[numpos].blockindex < blocksPerNumber[numstates[numpos].num_to_draw])
+      log_w("Invalid number to draw: %d", _fallStates[pos].value);
+      continue;
+    }
+
+    // Draw falling shape
+    if (_fallStates[pos].blockIndex < DigitBlockCount[_fallStates[pos].value])
+    {
+      finishedAnimating = false;
+      BlockFallData fallingBlock = getBlockFallData(_fallStates[pos].value, _fallStates[pos].blockIndex);
+
+      // Handle variations of rotations
+      BlockRotation rotation = fallingBlock.rotation;
+      if (rotation == ROTATION_90)
       {
-        finishedAnimating = false;
-        fall_instr current_fall = getFallinstrByNum(numstates[numpos].num_to_draw, numstates[numpos].blockindex);
-
-        // Handle variations of rotations
-        uint8_t rotations = current_fall.num_rot;
-        if (rotations == 1)
+        if (_fallStates[pos].yPos < (int)(fallingBlock.yPosFinal / 2))
         {
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 2))
-          {
-            rotations = 0;
-          }
+          rotation = ROTATION_0;
         }
-        if (rotations == 2)
+      }
+      else if (rotation == ROTATION_180)
+      {
+        if (_fallStates[pos].yPos < fallingBlock.yPosFinal / 3)
         {
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 3))
-          {
-            rotations = 0;
-          }
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 3 * 2))
-          {
-            rotations = 1;
-          }
+          rotation = ROTATION_0;
         }
-        if (rotations == 3)
+        else if (_fallStates[pos].yPos < 2 * fallingBlock.yPosFinal / 3)
         {
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4))
-          {
-            rotations = 0;
-          }
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4 * 2))
-          {
-            rotations = 1;
-          }
-          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4 * 3))
-          {
-            rotations = 2;
-          }
+          rotation = ROTATION_90;
         }
-
-        if(this->scale <= 1){
-          drawShape(current_fall.blocktype, 
-                    this->tetrisColors[current_fall.color],
-                    x + current_fall.x_pos + numstates[numpos].x_shift, 
-                    y + numstates[numpos].fallindex - scaledYOffset, 
-                    rotations);
-        } else {
-          drawLargerShape(this->scale, 
-                          current_fall.blocktype, 
-                          this->tetrisColors[current_fall.color], 
-                          x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift, 
-                          y + (numstates[numpos].fallindex * scaledYOffset) - scaledYOffset, 
-                          rotations);
-        }
-        numstates[numpos].fallindex++;
-
-        if (numstates[numpos].fallindex > current_fall.y_stop)
+      }
+      else if (rotation == ROTATION_270)
+      {
+        if (_fallStates[pos].yPos < fallingBlock.yPosFinal / 4)
         {
-          numstates[numpos].fallindex = 0;
-          numstates[numpos].blockindex++;
+          rotation = ROTATION_0;
+        }
+        else if (_fallStates[pos].yPos < 2 * fallingBlock.yPosFinal / 4)
+        {
+          rotation = ROTATION_90;
+        }
+        else if (_fallStates[pos].yPos < 3 * fallingBlock.yPosFinal / 4)
+        {
+          rotation = ROTATION_180;
         }
       }
 
-      // Draw already dropped shapes
-      if (numstates[numpos].blockindex > 0)
+      if (_scale <= 1)
       {
-        for (int i = 0; i < numstates[numpos].blockindex; i++)
+        drawShape(fallingBlock.type,
+                  DefaultPalette[fallingBlock.color],
+                  x + fallingBlock.xPos + _fallStates[pos].xPos,
+                  yStart + _fallStates[pos].yPos - 1,
+                  rotation);
+      }
+      else
+      {
+        drawLargerShape(_scale,
+                        fallingBlock.type,
+                        DefaultPalette[fallingBlock.color],
+                        x + (fallingBlock.xPos * _scale) + _fallStates[pos].xPos,
+                        yStart + (_fallStates[pos].yPos * (_scale - 1)),
+                        rotation);
+      }
+      _fallStates[pos].yPos++;
+
+      // current block done falling, move to next block
+      if (_fallStates[pos].yPos > fallingBlock.yPosFinal)
+      {
+        _fallStates[pos].yPos = 0;
+        _fallStates[pos].blockIndex++;
+      }
+    }
+
+    // Draw already dropped shapes
+    if (_fallStates[pos].blockIndex > 0)
+    {
+      for (int i = 0; i < _fallStates[pos].blockIndex; i++)
+      {
+        BlockFallData fallenBlock = getBlockFallData(_fallStates[pos].value, i);
+        if (_scale <= 1)
         {
-          fall_instr fallen_block = getFallinstrByNum(numstates[numpos].num_to_draw, i);
-          if(this->scale <= 1){
-            drawShape(fallen_block.blocktype, 
-                      this->tetrisColors[fallen_block.color], 
-                      x + fallen_block.x_pos + numstates[numpos].x_shift, 
-                      y + fallen_block.y_stop - 1, 
-                      fallen_block.num_rot);
-          } else {
-            drawLargerShape(this->scale, 
-                            fallen_block.blocktype, 
-                            this->tetrisColors[fallen_block.color], 
-                            x + (fallen_block.x_pos * this->scale) + numstates[numpos].x_shift, 
-                            y + (fallen_block.y_stop * scaledYOffset) - scaledYOffset, 
-                            fallen_block.num_rot);
-          }
+          drawShape(fallenBlock.type,
+                    DefaultPalette[fallenBlock.color],
+                    x + fallenBlock.xPos + _fallStates[pos].xPos,
+                    yStart + fallenBlock.yPosFinal - 1,
+                    fallenBlock.rotation);
+        }
+        else
+        {
+          drawLargerShape(_scale,
+                          fallenBlock.type,
+                          DefaultPalette[fallenBlock.color],
+                          x + (fallenBlock.xPos * _scale) + _fallStates[pos].xPos,
+                          yStart + (fallenBlock.yPosFinal * (_scale - 1)),
+                          fallenBlock.rotation);
         }
       }
     }
@@ -747,28 +719,32 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon)
 
   if (displayColon)
   {
-    this->drawColon(x, y, this->tetrisWHITE);
+    drawColon(x, yStart, tetrisWHITE);
   }
 
   return finishedAnimating;
 }
 
-void TetrisMatrixDraw::drawColon(int x, int y, uint16_t colonColour){
-  int colonSize = 2 * this->scale;
-  int xColonPos = x + (TETRIS_DISTANCE_BETWEEN_DIGITS * 2 * this->scale);  
-  display->fillRect(xColonPos, y + (12 * this->scale), colonSize, colonSize, colonColour);
-  display->fillRect(xColonPos, y + (8 * this->scale), colonSize, colonSize, colonColour);
+void TetrisMatrixDraw::drawColon(int x, int y, uint16_t colonColor)
+{
+  int colonSize = 2 * _scale;
+  int xColonPos = x + (TETRIS_DISTANCE_BETWEEN_DIGITS * 2 * _scale);
+  _display->fillRect(xColonPos, y + (12 * _scale), colonSize, colonSize, colonColor);
+  _display->fillRect(xColonPos, y + (8 * _scale), colonSize, colonSize, colonColor);
 }
 
-int TetrisMatrixDraw::calculateWidth(){
-  return (this->sizeOfValue * TETRIS_DISTANCE_BETWEEN_DIGITS) - 1;
+int TetrisMatrixDraw::calculateWidth()
+{
+  return (_displayValueCharCount * TETRIS_DISTANCE_BETWEEN_DIGITS) - 1;
 }
 
-void TetrisMatrixDraw::resetNumStates(){
-    for(int i = 0; i < TETRIS_MAX_NUMBERS; i++){
-        this->numstates[i].num_to_draw = -1;
-        this->numstates[i].fallindex = 0;
-        this->numstates[i].blockindex = 0;
-        this->numstates[i].x_shift = 0;
-    }
+void TetrisMatrixDraw::resetNumStates()
+{
+  for (int i = 0; i < TETRIS_MAX_NUMBERS; i++)
+  {
+    _fallStates[i].value = -1;
+    _fallStates[i].yPos = 0;
+    _fallStates[i].blockIndex = 0;
+    _fallStates[i].xPos = 0;
+  }
 }

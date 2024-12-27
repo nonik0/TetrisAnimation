@@ -1,230 +1,157 @@
+#pragma once
+
+#include "TetrisCommon.h"
+
 // *********************************************************************
-// Types and data that describes how numbers are drawed
+// Types and data that describes how numbers are drawn
 // *********************************************************************
 
-// Type that describes how a brick is falling down
-typedef struct
-{
-  int blocktype;  // Number of the block type
-  int color; // Color of the brick
-  int x_pos;      // x-position (starting from the left number staring point) where the brick should be placed
-  int y_stop;     // y-position (1-16, where 16 is the last line of the matrix) where the brick should stop falling
-  int num_rot;    // Number of 90-degree (clockwise) rotations a brick is turned from the standard position
-} fall_instr;
-
-static const int xShiftClock[4] = {0, 7, 17, 24};
+static const int xShiftClock[4] = {SQUARE, 7, 17, 24};
 
 // *********************************************************************
 // Fall instructions for all numbers
 // *********************************************************************
 
-// *********************************************************************
-// Number 0
-// *********************************************************************
-#define SIZE_NUM_0 12
-static const fall_instr num_0[SIZE_NUM_0] = {
-    {2, 5, 4, 16, 0},
-    {4, 7, 2, 16, 1},
-    {3, 4, 0, 16, 1},
-    {6, 6, 1, 16, 1},
-    {5, 1, 4, 14, 0},
-    {6, 6, 0, 13, 3},
-    {5, 1, 4, 12, 0},
-    {5, 1, 0, 11, 0},
-    {6, 6, 4, 10, 1},
-    {6, 6, 0, 9, 1},
-    {5, 1, 1, 8, 1},
-    {2, 5, 3, 8, 3}};
+static const BlockFallData ZeroFall[] = {
+    {L_SHAPE_REVERSE, ROTATION_0, PALETTE_CYAN, 4, 16},
+    {S_SHAPE, ROTATION_90, PALETTE_ORANGE, 2, 16},
+    {I_SHAPE, ROTATION_90, PALETTE_YELLOW, 0, 16},
+    {HALF_CROSS, ROTATION_90, PALETTE_MAGENTA, 1, 16},
+    {S_SHAPE_REVERSE, ROTATION_0, PALETTE_GREEN, 4, 14},
+    {HALF_CROSS, ROTATION_270, PALETTE_MAGENTA, 0, 13},
+    {S_SHAPE_REVERSE, ROTATION_0, PALETTE_GREEN, 4, 12},
+    {S_SHAPE_REVERSE, ROTATION_0, PALETTE_GREEN, 0, 11},
+    {HALF_CROSS, ROTATION_90, PALETTE_MAGENTA, 4, 10},
+    {HALF_CROSS, ROTATION_90, PALETTE_MAGENTA, 0, 9},
+    {S_SHAPE_REVERSE, ROTATION_90, PALETTE_GREEN, 1, 8},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 8}};
+static const size_t ZeroFallSize = sizeof(ZeroFall) / sizeof(ZeroFall[0]);
 
-// *********************************************************************
-// Number 1
-// *********************************************************************
-#define SIZE_NUM_1 5
-static const fall_instr num_1[SIZE_NUM_1] = {
-    {2, 5, 4, 16, 0},
-    {3, 4, 4, 15, 1},
-    {3, 4, 5, 13, 3},
-    {2, 5, 4, 11, 2},
-    {0, 0, 4, 8, 0}};
+static const BlockFallData OneFall[] = {
+    {L_SHAPE_REVERSE, ROTATION_0, PALETTE_CYAN, 4, 16},
+    {I_SHAPE, ROTATION_90, PALETTE_YELLOW, 4, 15},
+    {I_SHAPE, ROTATION_270, PALETTE_YELLOW, 5, 13},
+    {L_SHAPE_REVERSE, ROTATION_180, PALETTE_CYAN, 4, 11},
+    {SQUARE, ROTATION_0, PALETTE_RED, 4, 8}};
+static const size_t OneFallSize = sizeof(OneFall) / sizeof(OneFall[0]);
 
-// *********************************************************************
-// Number 2
-// *********************************************************************
-#define SIZE_NUM_2 11
-static const fall_instr num_2[SIZE_NUM_2] = {
-    {0, 0, 4, 16, 0},
-    {3, 4, 0, 16, 1},
-    {1, 2, 1, 16, 3},
-    {1, 2, 1, 15, 0},
-    {3, 4, 1, 12, 2},
-    {1, 2, 0, 12, 1},
-    {2, 5, 3, 12, 3},
-    {0, 0, 4, 10, 0},
-    {3, 4, 1, 8, 0},
-    {2, 5, 3, 8, 3},
-    {1, 2, 0, 8, 1}};
+static const BlockFallData TwoFall[] = {
+    {SQUARE, ROTATION_0, PALETTE_RED, 4, 16},
+    {I_SHAPE, ROTATION_90, PALETTE_YELLOW, 0, 16},
+    {L_SHAPE, ROTATION_270, PALETTE_BLUE, 1, 16},
+    {L_SHAPE, ROTATION_0, PALETTE_BLUE, 1, 15},
+    {I_SHAPE, ROTATION_180, PALETTE_YELLOW, 1, 12},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 12},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 12},
+    {SQUARE, ROTATION_0, PALETTE_RED, 4, 10},
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 1, 8},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 8},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 8}};
+static const size_t TwoFallSize = sizeof(TwoFall) / sizeof(TwoFall[0]);
 
-// *********************************************************************
-// Number 3
-// *********************************************************************
-#define SIZE_NUM_3 11
-static const fall_instr num_3[SIZE_NUM_3] = {
-    {1, 2, 3, 16, 3},
-    {2, 5, 0, 16, 1},
-    {3, 4, 1, 15, 2},
-    {0, 0, 4, 14, 0},
-    {3, 4, 1, 12, 2},
-    {1, 2, 0, 12, 1},
-    {3, 4, 5, 12, 3},
-    {2, 5, 3, 11, 0},
-    {3, 4, 1, 8, 0},
-    {1, 2, 0, 8, 1},
-    {2, 5, 3, 8, 3}};
+static const BlockFallData ThreeFall[] = {
+    {L_SHAPE, ROTATION_270, PALETTE_BLUE, 3, 16},
+    {L_SHAPE_REVERSE, ROTATION_90, PALETTE_CYAN, 0, 16},
+    {I_SHAPE, ROTATION_180, PALETTE_YELLOW, 1, 15},
+    {SQUARE, ROTATION_0, PALETTE_RED, 4, 14},
+    {I_SHAPE, ROTATION_180, PALETTE_YELLOW, 1, 12},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 12},
+    {I_SHAPE, ROTATION_270, PALETTE_YELLOW, 5, 12},
+    {L_SHAPE_REVERSE, ROTATION_0, PALETTE_CYAN, 3, 11},
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 1, 8},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 8},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 8}};
+static const size_t ThreeFallSize = sizeof(ThreeFall) / sizeof(ThreeFall[0]);
 
-// *********************************************************************
-// Number 4
-// *********************************************************************
-#define SIZE_NUM_4 9
-static const fall_instr num_4[SIZE_NUM_4] = {
-    {0, 0, 4, 16, 0},
-    {0, 0, 4, 14, 0},
-    {3, 4, 1, 12, 0},
-    {1, 2, 0, 12, 1},
-    {2, 5, 0, 10, 0},
-    {2, 5, 3, 12, 3},
-    {3, 4, 4, 10, 3},
-    {2, 5, 0, 9, 2},
-    {3, 4, 5, 10, 1}};
+static const BlockFallData FourFall[] = {
+    {SQUARE, ROTATION_0, PALETTE_RED, 4, 16},
+    {SQUARE, ROTATION_0, PALETTE_RED, 4, 14},
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 1, 12},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 12},
+    {L_SHAPE_REVERSE, ROTATION_0, PALETTE_CYAN, 0, 10},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 12},
+    {I_SHAPE, ROTATION_270, PALETTE_YELLOW, 4, 10},
+    {L_SHAPE_REVERSE, ROTATION_180, PALETTE_CYAN, 0, 9},
+    {I_SHAPE, ROTATION_90, PALETTE_YELLOW, 5, 10}};
+static const size_t FourFallSize = sizeof(FourFall) / sizeof(FourFall[0]);
 
-// *********************************************************************
-// Number 5
-// *********************************************************************
-#define SIZE_NUM_5 11
-static const fall_instr num_5[SIZE_NUM_5] = {
-    {0, 0, 0, 16, 0},
-    {2, 5, 2, 16, 1},
-    {2, 5, 3, 15, 0},
-    {3, 4, 5, 16, 1},
-    {3, 4, 1, 12, 0},
-    {1, 2, 0, 12, 1},
-    {2, 5, 3, 12, 3},
-    {0, 0, 0, 10, 0},
-    {3, 4, 1, 8, 2},
-    {1, 2, 0, 8, 1},
-    {2, 5, 3, 8, 3}};
+static const BlockFallData FiveFall[] = {
+    {SQUARE, ROTATION_0, PALETTE_RED, 0, 16},
+    {L_SHAPE_REVERSE, ROTATION_90, PALETTE_CYAN, 2, 16},
+    {L_SHAPE_REVERSE, ROTATION_0, PALETTE_CYAN, 3, 15},
+    {I_SHAPE, ROTATION_90, PALETTE_YELLOW, 5, 16},
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 1, 12},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 12},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 12},
+    {SQUARE, ROTATION_0, PALETTE_RED, 0, 10},
+    {I_SHAPE, ROTATION_180, PALETTE_YELLOW, 1, 8},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 8},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 8}};
+static const size_t FiveFallSize = sizeof(FiveFall) / sizeof(FiveFall[0]);
 
-// *********************************************************************
-// Number 6
-// *********************************************************************
-#define SIZE_NUM_6 12
-static const fall_instr num_6[SIZE_NUM_6] = {
-    {2, 5, 0, 16, 1},
-    {5, 1, 2, 16, 1},
-    {6, 6, 0, 15, 3},
-    {6, 6, 4, 16, 3},
-    {5, 1, 4, 14, 0},
-    {3, 4, 1, 12, 2},
-    {2, 5, 0, 13, 2},
-    {3, 4, 2, 11, 0},
-    {0, 0, 0, 10, 0},
-    {3, 4, 1, 8, 0},
-    {1, 2, 0, 8, 1},
-    {2, 5, 3, 8, 3}};
+static const BlockFallData SixFall[] = {
+    {L_SHAPE_REVERSE, ROTATION_90, PALETTE_CYAN, 0, 16},
+    {S_SHAPE_REVERSE, ROTATION_90, PALETTE_GREEN, 2, 16},
+    {HALF_CROSS, ROTATION_270, PALETTE_MAGENTA, 0, 15},
+    {HALF_CROSS, ROTATION_270, PALETTE_MAGENTA, 4, 16},
+    {S_SHAPE_REVERSE, ROTATION_0, PALETTE_GREEN, 4, 14},
+    {I_SHAPE, ROTATION_180, PALETTE_YELLOW, 1, 12},
+    {L_SHAPE_REVERSE, ROTATION_180, PALETTE_CYAN, 0, 13},
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 2, 11},
+    {SQUARE, ROTATION_0, PALETTE_RED, 0, 10},
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 1, 8},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 8},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 8}};
+static const size_t SixFallSize = sizeof(SixFall) / sizeof(SixFall[0]);
 
-// *********************************************************************
-// Number 7
-// *********************************************************************
-#define SIZE_NUM_7 7
-static const fall_instr num_7[SIZE_NUM_7] = {
-    {0, 0, 4, 16, 0},
-    {1, 2, 4, 14, 0},
-    {3, 4, 5, 13, 1},
-    {2, 5, 4, 11, 2},
-    {3, 4, 1, 8, 2},
-    {2, 5, 3, 8, 3},
-    {1, 2, 0, 8, 1}};
+static const BlockFallData SevenFall[] = {
+    {SQUARE, ROTATION_0, PALETTE_RED, 4, 16},
+    {L_SHAPE, ROTATION_0, PALETTE_BLUE, 4, 14},
+    {I_SHAPE, ROTATION_90, PALETTE_YELLOW, 5, 13},
+    {L_SHAPE_REVERSE, ROTATION_180, PALETTE_CYAN, 4, 11},
+    {I_SHAPE, ROTATION_180, PALETTE_YELLOW, 1, 8},
+    {L_SHAPE_REVERSE, ROTATION_270, PALETTE_CYAN, 3, 8},
+    {L_SHAPE, ROTATION_90, PALETTE_BLUE, 0, 8}};
+static const size_t SevenFallSize = sizeof(SevenFall) / sizeof(SevenFall[0]);
 
-// *********************************************************************
-// Number 8
-// *********************************************************************
-#define SIZE_NUM_8 13
-static const fall_instr num_8[SIZE_NUM_8] = {
-    {3, 4, 1, 16, 0},
-    {6, 6, 0, 16, 1},
-    {3, 4, 5, 16, 1},
-    {1, 2, 2, 15, 3},
-    {4, 7, 0, 14, 0},
-    {1, 2, 1, 12, 3},
-    {6, 6, 4, 13, 1},
-    {2, 5, 0, 11, 1},
-    {4, 7, 0, 10, 0},
-    {4, 7, 4, 11, 0},
-    {5, 1, 0, 8, 1},
-    {5, 1, 2, 8, 1},
-    {1, 2, 4, 9, 2}};
+static const BlockFallData EightFall[] = {
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 1, 16},
+    {HALF_CROSS, ROTATION_90, PALETTE_MAGENTA, 0, 16},
+    {I_SHAPE, ROTATION_90, PALETTE_YELLOW, 5, 16},
+    {L_SHAPE, ROTATION_270, PALETTE_BLUE, 2, 15},
+    {S_SHAPE, ROTATION_0, PALETTE_ORANGE, 0, 14},
+    {L_SHAPE, ROTATION_270, PALETTE_BLUE, 1, 12},
+    {HALF_CROSS, ROTATION_90, PALETTE_MAGENTA, 4, 13},
+    {L_SHAPE_REVERSE, ROTATION_90, PALETTE_CYAN, 0, 11},
+    {S_SHAPE, ROTATION_0, PALETTE_ORANGE, 0, 10},
+    {S_SHAPE, ROTATION_0, PALETTE_ORANGE, 4, 11},
+    {S_SHAPE_REVERSE, ROTATION_90, PALETTE_GREEN, 0, 8},
+    {S_SHAPE_REVERSE, ROTATION_90, PALETTE_GREEN, 2, 8},
+    {L_SHAPE, ROTATION_180, PALETTE_BLUE, 4, 9}};
+static const size_t EightFallSize = sizeof(EightFall) / sizeof(EightFall[0]);
 
-// *********************************************************************
-// Number 9
-// *********************************************************************
-#define SIZE_NUM_9 12
-static const fall_instr num_9[SIZE_NUM_9] = {
-    {0, 0, 0, 16, 0},
-    {3, 4, 2, 16, 0},
-    {1, 2, 2, 15, 3},
-    {1, 2, 4, 15, 2},
-    {3, 4, 1, 12, 2},
-    {3, 4, 5, 12, 3},
-    {5, 1, 0, 12, 0},
-    {1, 2, 2, 11, 3},
-    {5, 1, 4, 9, 0},
-    {6, 6, 0, 10, 1},
-    {5, 1, 0, 8, 1},
-    {6, 6, 2, 8, 2}};
+static const BlockFallData NineFall[] = {
+    {SQUARE, ROTATION_0, PALETTE_RED, 0, 16},
+    {I_SHAPE, ROTATION_0, PALETTE_YELLOW, 2, 16},
+    {L_SHAPE, ROTATION_270, PALETTE_BLUE, 2, 15},
+    {L_SHAPE, ROTATION_180, PALETTE_BLUE, 4, 15},
+    {I_SHAPE, ROTATION_180, PALETTE_YELLOW, 1, 12},
+    {I_SHAPE, ROTATION_270, PALETTE_YELLOW, 5, 12},
+    {S_SHAPE_REVERSE, ROTATION_0, PALETTE_GREEN, 0, 12},
+    {L_SHAPE, ROTATION_270, PALETTE_BLUE, 2, 11},
+    {S_SHAPE_REVERSE, ROTATION_0, PALETTE_GREEN, 4, 9},
+    {HALF_CROSS, ROTATION_90, PALETTE_MAGENTA, 0, 10},
+    {S_SHAPE_REVERSE, ROTATION_90, PALETTE_GREEN, 0, 8},
+    {HALF_CROSS, ROTATION_180, PALETTE_MAGENTA, 2, 8}};
+static const size_t NineFallSize = sizeof(NineFall) / sizeof(NineFall[0]);
 
-static const int blocksPerNumber[10] = {SIZE_NUM_0, SIZE_NUM_1, SIZE_NUM_2, SIZE_NUM_3, SIZE_NUM_4, SIZE_NUM_5, SIZE_NUM_6, SIZE_NUM_7, SIZE_NUM_8, SIZE_NUM_9};
+static const BlockFallData* DigitFallData[10] = {ZeroFall, OneFall, TwoFall, ThreeFall, FourFall, FiveFall, SixFall, SevenFall, EightFall, NineFall};
+static const int DigitBlockCount[10] = {ZeroFallSize, OneFallSize, TwoFallSize, ThreeFallSize, FourFallSize, FiveFallSize, SixFallSize, SevenFallSize, EightFallSize, NineFallSize};
 
 // *********************************************************************
 // Helper function that that return the falling instruction for a given number
 // *********************************************************************
-static const fall_instr getFallinstrByNum(int num, int blockindex)
+static const BlockFallData getBlockFallData(int digit, int blockIndex)
 {
-  if (num == 0)
-  {
-    return num_0[blockindex];
-  }
-  if (num == 1)
-  {
-    return num_1[blockindex];
-  }
-  if (num == 2)
-  {
-    return num_2[blockindex];
-  }
-  if (num == 3)
-  {
-    return num_3[blockindex];
-  }
-  if (num == 4)
-  {
-    return num_4[blockindex];
-  }
-  if (num == 5)
-  {
-    return num_5[blockindex];
-  }
-  if (num == 6)
-  {
-    return num_6[blockindex];
-  }
-  if (num == 7)
-  {
-    return num_7[blockindex];
-  }
-  if (num == 8)
-  {
-    return num_8[blockindex];
-  }
-
-  // implicit return
-  return num_9[blockindex];
+  return DigitFallData[digit][blockIndex];
 }
